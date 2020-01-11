@@ -1,4 +1,8 @@
 virtual
 *.pyc
 db.sqlite3
+<<<<<<< HEAD
 migrations/
+=======
+.vscode
+>>>>>>> 5a148a7ea7d26c0173f818cd1e01d693532c8e2e
