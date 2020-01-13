@@ -78,3 +78,10 @@ class UserDetailsFromToken(RetrieveAPIView):
                 'level': request.user.level
             }
         ))
+
+class AssessmentPeriod(ModelForm):
+  class Meta:
+      model = assessment_period
+      fields = ['id', 'start', 'end' 'initiating_user']
+
+def 
