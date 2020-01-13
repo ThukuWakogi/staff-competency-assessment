@@ -1,26 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import AbstractUser, User as AuthUser
 from django.utils.translation import gettext_lazy as _ 
 from django.utils import timezone
-
-from .managers import CustomUserManager
 
 # Create your models here.
 class Level(models.Model):
     name = models.CharField(max_length=60)
     job_grade = models.IntegerField()
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    level = models.ForeignKey('Level', blank=True, null=True, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
-    objects = CustomUserManager()
 
     def __str__(self):
         return self.email
