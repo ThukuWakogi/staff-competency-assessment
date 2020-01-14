@@ -92,7 +92,7 @@ class AssessmentPeriod(APIView):
       serializers = PeriodSerializer(period) 
       return Response(serializer.data)        
 
- def put(self, request, pk, format=None):
+  def put(self, request, pk, format=None):
      period = self.get_period(pk)
      serializers = PeriodSerializer(period,request.data)
      if serializers.is_valid():
@@ -102,7 +102,7 @@ class AssessmentPeriod(APIView):
          return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
- def delete(self, request, pk, format=None):
+  def delete(self, request, pk, format=None):
      period = self.get_period(pk)  
      period.delete()   
      return Response (status=status.HTTP_204_NO_CONTENT)
