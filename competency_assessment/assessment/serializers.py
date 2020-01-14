@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Assessment_period
+from .models import User, Assessment_period, Rating, Competency
 
 # Create your views here.
 # Serializers define the API representation.
@@ -35,3 +35,14 @@ class PeriodSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assessment_period
         fields = ('id', 'start_date', 'end_date', 'initiating_user')     
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = ('name', 'rating')   
+
+class CompetencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model =  Competency
+        fields = ('name')      
