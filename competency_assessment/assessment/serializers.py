@@ -107,3 +107,9 @@ class StrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Strand
         fields = ('name', 'competency')        
+class AssessmentSerializer(serializers.ModelSerializer):
+    user_id = UserSerializer(many=True, read_only=True)
+    assessment_period = PeriodSerializer(many=True, read_only=True)
+    class Meta:
+        model = Assessment 
+        fields = ('user_id','assessment_period', 'is_assessed_by_manager', 'is_assessed_after_norming')
