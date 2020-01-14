@@ -79,9 +79,10 @@ class UserDetailsFromToken(RetrieveAPIView):
             }
         ))
 
-class AssessmentPeriod(ModelForm):
-  class Meta:
-      model = assessment_period
-      fields = ['id', 'start', 'end' 'initiating_user']
-
-def 
+class AssessmentPeriod(APIView):
+  permission_classes = (IsAdminReadOnly,)
+  def get_period(self,pk):
+      try:
+          return AssessmentPeriod.objects.get(pk=pk)
+      except AssessmentPeriod.DoesNotExist:
+          return Http404    
