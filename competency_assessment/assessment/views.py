@@ -7,8 +7,8 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from .models import User
-from .serializers import UserSerializer
+from .models import User, Assessment_period
+from .serializers import UserSerializer, PeriodSerializer
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -78,3 +78,32 @@ class UserDetailsFromToken(RetrieveAPIView):
                 'level': request.user.level
             }
         ))
+
+class AssessmentPeriodViewSet(viewsets.ModelViewSet):
+    queryset = Assessment_period.objects.all()
+    serializer_class = PeriodSerializer
+    def get_period(self,pk):
+        try:
+            return AssessmentPeriod.objects.get(pk=pk)
+        except AssessmentPeriod.DoesNotExist:
+            return Http404 
+
+    def get(self, request, pk, format=None):
+        period = self.get_period(pk)
+        serializers = PeriodSerializer(period) 
+        return Response(serializer.data)        
+
+    def put(self, request, pk, format=None):
+        period = self.get_period(pk)
+        serializers = PeriodSerializer(period,request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, pk, format=None):
+        period = self.get_period(pk)  
+        period.delete()   
+        return Response (status=status.HTTP_204_NO_CONTENT)
