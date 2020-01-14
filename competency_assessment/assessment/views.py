@@ -90,4 +90,14 @@ class AssessmentPeriod(APIView):
   def get(self, request, pk, format=None):
       period = self.get_period(pk)
       serializers = PeriodSerializer(period) 
-      return Response(serializer.data)          
+      return Response(serializer.data)        
+
+ def put(self, request, pk, format=None):
+     period = self.get_period(pk)
+     serializers = PeriodSerializer(period,request.data)
+     if serializers.is_valid():
+         serializers.save()
+         return Response(serializers.data)
+     else:
+         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+                
