@@ -85,4 +85,9 @@ class AssessmentPeriod(APIView):
       try:
           return AssessmentPeriod.objects.get(pk=pk)
       except AssessmentPeriod.DoesNotExist:
-          return Http404    
+          return Http404 
+
+  def get(self, request, pk, format=None):
+      period = self.get_period(pk)
+      serializers = PeriodSerializer(period) 
+      return Response(serializer.data)          
