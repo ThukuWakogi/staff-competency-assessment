@@ -3,3 +3,5 @@ virtual
 db.sqlite3
 migrations/
 .vscode
+start-personal.ps1
+start-personal.sh
