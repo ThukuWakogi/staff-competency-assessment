@@ -32,6 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class PeriodSerializer(serializers.ModelSerializer):
+    initiating_user = UserSerializer(many=True, read_only=True)
     class Meta:
         model = Assessment_period
         fields = ('id', 'start_date', 'end_date', 'initiating_user')     
@@ -48,9 +49,11 @@ class CompetencySerializer(serializers.ModelSerializer):
         fields = ('name')  
 
 class StrandSerializer(serializers.ModelSerializer):
+    competency = CompetencySerializer(many=True, read_only=True)
     class Meta:
         model = Strand
-        fields = ('name', 'competency')        
+        fields = ('name', 'competency')  
+
 class AssessmentSerializer(serializers.ModelSerializer):
     user_id = UserSerializer(many=True, read_only=True)
     assessment_period = PeriodSerializer(many=True, read_only=True)
