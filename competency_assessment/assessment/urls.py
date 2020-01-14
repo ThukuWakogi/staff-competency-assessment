@@ -3,7 +3,8 @@ from rest_framework import routers
 from competency_assessment.assessment import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
+router.register(r'users', views.UserViewSet),
+router.register(r'assessment-period', views.AssessmentPeriodViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

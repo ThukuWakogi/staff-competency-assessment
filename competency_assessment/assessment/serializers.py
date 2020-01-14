@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Assessment_period
 
 # Create your views here.
 # Serializers define the API representation.
