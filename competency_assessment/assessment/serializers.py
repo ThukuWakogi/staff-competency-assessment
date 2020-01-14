@@ -1,6 +1,10 @@
 from rest_framework import serializers
+<<<<<<< HEAD
 from .models import User, AssessmentPeriod, Rating, Competency, Strand, Assessment, AssessmentResults, Idp, Notification
 
+=======
+from .models import User, Assessment_period, Rating, Competency
+>>>>>>> create serializers for competency and rating
 
 # Create your views here.
 # Serializers define the API representation.
@@ -88,3 +92,17 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
+        model = Assessment_period
+        fields = ('id', 'start_date', 'end_date', 'initiating_user')     
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = ('name', 'rating')   
+
+
+class CompetencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model =  Competency
+        fields = ('name')      
