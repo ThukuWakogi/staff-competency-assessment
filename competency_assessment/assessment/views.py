@@ -131,3 +131,7 @@ class  RatingViewSet(viewsets.ModelViewSet):
 class AssessmentResultViewSet(viewsets.ModelViewSet):
        queryset = Assessment_results.objects.all()
        serializer_class = ResultsSerializer
+
+class CompetencyViewSet(viewsets.ModelViewSet):
+       queryset = Competency.objects.all()
+       serializer_class = CompetencySerializer       
