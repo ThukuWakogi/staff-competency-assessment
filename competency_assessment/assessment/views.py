@@ -7,8 +7,8 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from .models import User, Assessment_period, Assessment, Rating
-from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer,RatingSerializer 
+from .models import User, Assessment_period, Assessment, Rating, Assessment_results
+from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer,RatingSerializer,ResultsSerializer
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -122,3 +122,7 @@ class AssessmentViewSet(viewsets.ModelViewSet):
 class  RatingViewSet(viewsets.ModelViewSet):
        queryset = Rating.objects.all()
        serializer_class = RatingSerializer
+
+class Assessment_resultsViewSet(viewsets.ModelViewSet):
+       queryset = Assessment_results.objects.all()
+       serializer_class = ResultsSerializer
