@@ -9,8 +9,13 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 import json
 
+<<<<<<< HEAD
 from .models import User, Assessment_period, Team, TeamLeader, Assessment, Rating
 from .serializers import UserSerializer, PeriodSerializer, TeamSerializer, AssessmentSerializer, RatingSerializer
+=======
+from .models import User, Assessment_period, Assessment, Rating, Assessment_results
+from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer,RatingSerializer,ResultsSerializer
+>>>>>>> create the assessment result viewset
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -215,3 +220,7 @@ class AssessmentViewSet(viewsets.ModelViewSet):
 class  RatingViewSet(viewsets.ModelViewSet):
        queryset = Rating.objects.all()
        serializer_class = RatingSerializer
+
+class Assessment_resultsViewSet(viewsets.ModelViewSet):
+       queryset = Assessment_results.objects.all()
+       serializer_class = ResultsSerializer
