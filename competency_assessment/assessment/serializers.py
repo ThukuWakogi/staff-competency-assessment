@@ -59,14 +59,6 @@ class StrandSerializer(serializers.ModelSerializer):
         fields = ('name', 'competency')
 
 
-class AssessmentSerializer(serializers.ModelSerializer):
-    # user_id = UserSerializer(many=True, read_only=True)
-    # assessment_period = PeriodSerializer(many=True, read_only=True)
-    class Meta:
-        model = Assessment
-        fields = '__all__'
-
-
 class ResultsSerializer(serializers.ModelSerializer):
     # user_id = UserSerializer(many=True, read_only=True)
     # assessment = AssessmentSerializer(many=True, read_only=True)
@@ -88,37 +80,13 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
-        model = Assessment_period
+        model = AssessmentPeriod
         fields = ('id', 'start_date', 'end_date', 'initiating_user')     
 
 
-class RatingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rating
-        fields = ('name', 'rating')   
-
-
-class CompetencySerializer(serializers.ModelSerializer):
-    class Meta:
-        model =  Competency
-        fields = ('name')  
-
-class StrandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Strand
-        fields = ('name', 'competency')        
 class AssessmentSerializer(serializers.ModelSerializer):
     user_id = UserSerializer(many=True, read_only=True)
     assessment_period = PeriodSerializer(many=True, read_only=True)
     class Meta:
         model = Assessment 
         fields = ('user_id','assessment_period', 'is_assessed_by_manager', 'is_assessed_after_norming')
-
-class ResultsSerializer(serializers.ModelSerializer):
-    user_id = UserSerializer(many=True, read_only=True)
-    assessment = AssessmentSerializer(many=True, read_only=True)
-    strand = StrandSerializer(many=True,read_only=True)
-    rating = RatingSerializer(many=True,read_only=True)
-    class Meta:
-        model = Assessment_results
-        fields = ('user_id', 'assessment', 'competency', 'strand', 'rating')
