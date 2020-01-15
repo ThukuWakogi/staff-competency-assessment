@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status, generics
+from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -110,31 +111,54 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
 
 
 
-class DirectManagerViewSet(viewsets.ModelViewSet):
-    queryset = Direct_manager.objects.all()
-    serializer_class = DirectManagerSerializer
+# class DirectManagerViewSet(viewsets.ModelViewSet):
+#     queryset = Direct_manager.objects.all()
+#     serializer_class = DirectManagerSerializer
 
-    def list(self, request, *args, **kwargs):
+#     def list(self, request, *args, **kwargs):
+#         managers = Direct_manager.objects.all()
+#         serializer = DirectManagerSerializer(managers, many=True)
+#         managers_expanded = []
+
+#         for manager in serializer.data:
+#             staff = User.objects.get(id=dict(manager)['staff'])
+#             managers_expanded.append({
+#                 'id': dict(manager)['id'],
+#                 'name': dict(manager)['name'],
+#                 'staff': {
+#                     'id': staff.id,
+#                     'last_login': staff.last_login,
+#                     'is_superuser': staff.is_superuser,
+#                     'first_name': staff.first_name,
+#                     'last_name': staff.last_name,
+#                     'is_staff': staff.is_staff,
+#                     'date_joined': staff.date_joined,
+#                     'email': staff.email,
+
+#                 }
+#             })
+
+#         return Response(managers_expanded)
+
+
+class UsersByManagers(APIView):
+    def get(self, request, format=None):
         managers = Direct_manager.objects.all()
-        serializer = DirectManagerSerializer(managers, many=True)
-        managers_expanded = []
+        managers_emails = set()
+        users_by_managers = {}
 
-        for manager in serializer.data:
-            staff = User.objects.get(id=dict(manager)['staff'])
-            managers_expanded.append({
-                'id': dict(manager)['id'],
-                'name': dict(manager)['name'],
-                'staff': {
-                    'id': staff.id,
-                    'last_login': staff.last_login,
-                    'is_superuser': staff.is_superuser,
-                    'first_name': staff.first_name,
-                    'last_name': staff.last_name,
-                    'is_staff': staff.is_staff,
-                    'date_joined': staff.date_joined,
-                    'email': staff.email,
+        for manager in managers:
+            #print(manager.manager)
+            managers_emails.add(manager.manager)
 
-                }
-            })
+        for email in managers_emails:
+            manager = User.objects.get(email=email)
+            print(manager)
+            staff_email = Direct_manager.objects.filter(manager=manager)
 
-        return Response(managers_expanded)
+            for staff in staff_email:
+                print('    ' + str(staff.user_id))
+                user = User.objects.get(email=staff)
+                print(user.__dict__)
+
+        return Response({'lol': 'lol'})

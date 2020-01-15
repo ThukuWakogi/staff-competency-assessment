@@ -38,7 +38,7 @@ class PeriodSerializer(serializers.ModelSerializer):
 
 
 class DirectManagerSerializer(serializers.ModelSerializer):
-    users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    # users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     class Meta:
         model = Direct_manager
-        fields = ('user_id', 'manager')
+        fields = '__all__'
