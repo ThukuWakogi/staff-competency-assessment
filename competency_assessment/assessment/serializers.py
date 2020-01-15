@@ -77,3 +77,9 @@ class ResultsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assessment_results
         fields = ('user_id', 'assessment', 'competency', 'strand', 'rating')
+
+class IdpSerializer(serializers.ModelSerializer):
+    assessment = AssessmentSerializer(many=True, read_only=True)
+    class Meta:
+        model = Idp
+        fields = ('assessment', 'actions', 'resources', 'target', 'progress_indicator', 'nature_of_support')
