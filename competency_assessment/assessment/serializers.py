@@ -41,7 +41,7 @@ class PeriodSerializer(serializers.ModelSerializer):
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
-        fields = ('name', 'rating')   
+        fields = '__all__'  
 
 class CompetencySerializer(serializers.ModelSerializer):
     class Meta:
