@@ -1,12 +1,8 @@
 from django.contrib import admin
-<<<<<<< HEAD
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User
-=======
-from .models import User, Assessment_period
->>>>>>> feature-assessments
+from .models import User, Assessment_period, Direct_manager
 
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
@@ -31,10 +27,6 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ('email',)
 
 
-<<<<<<< HEAD
-admin.site.site_header = "HR Dashboard"
-=======
-admin.site.register(User)
 admin.site.register(Assessment_period)
+admin.site.register(Direct_manager)
 admin.site.site_header = "HR Dashboard"
->>>>>>> feature-assessments

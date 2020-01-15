@@ -7,8 +7,8 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from .models import User, Assessment_period
-from .serializers import UserSerializer, PeriodSerializer
+from .models import User, Assessment_period, Direct_manager
+from .serializers import UserSerializer, PeriodSerializer, DirectManagerSerializer
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -107,3 +107,34 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
         period = self.get_period(pk)  
         period.delete()   
         return Response (status=status.HTTP_204_NO_CONTENT)
+
+
+
+class DirectManagerViewSet(viewsets.ModelViewSet):
+    queryset = Direct_manager.objects.all()
+    serializer_class = DirectManagerSerializer
+
+    def list(self, request, *args, **kwargs):
+        managers = Direct_manager.objects.all()
+        serializer = DirectManagerSerializer(managers, many=True)
+        managers_expanded = []
+
+        for manager in serializer.data:
+            staff = User.objects.get(id=dict(manager)['staff'])
+            managers_expanded.append({
+                'id': dict(manager)['id'],
+                'name': dict(manager)['name'],
+                'staff': {
+                    'id': staff.id,
+                    'last_login': staff.last_login,
+                    'is_superuser': staff.is_superuser,
+                    'first_name': staff.first_name,
+                    'last_name': staff.last_name,
+                    'is_staff': staff.is_staff,
+                    'date_joined': staff.date_joined,
+                    'email': staff.email,
+
+                }
+            })
+
+        return Response(managers_expanded)

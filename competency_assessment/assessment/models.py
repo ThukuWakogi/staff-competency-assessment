@@ -9,6 +9,9 @@ class Level(models.Model):
     name = models.CharField(max_length=60)
     job_grade = models.IntegerField()
 
+class Direct_manager(models.Model):
+    manager = models.CharField(max_length=250)
+
 
 class UserManager(BaseUserManager):
     """
@@ -56,6 +59,7 @@ class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     level = models.ForeignKey('Level', blank=True, null=True, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
+    direct_manager = models.ForeignKey(Direct_manager, on_delete=models.CASCADE, default=None)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -113,6 +117,3 @@ class Notifications(models.Model):
     is_seen = models.CharField(max_length=200)
 
 
-class Direct_manager(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staff')
-    manager = models.ForeignKey(User, on_delete=models.CASCADE, related_name='direct_manager')
