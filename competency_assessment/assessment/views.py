@@ -134,4 +134,8 @@ class AssessmentResultViewSet(viewsets.ModelViewSet):
 
 class CompetencyViewSet(viewsets.ModelViewSet):
        queryset = Competency.objects.all()
-       serializer_class = CompetencySerializer       
+       serializer_class = CompetencySerializer  
+
+class StrandViewSet(viewsets.ModelViewSet):
+      queryset = Strand.objects.all()
+      serializer_class = StrandSerializer          
