@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User, Team, Assessment_period, TeamLeader, Assessment
+from .models import User, Team, Assessment_period, TeamLeader, Assessment, Assessment_results
 
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
@@ -31,4 +31,5 @@ admin.site.register(Assessment_period)
 admin.site.register(Team)
 admin.site.register(TeamLeader)
 admin.site.register(Assessment)
+admin.site.register(Assessment_results)
 admin.site.site_header = "HR Dashboard"
