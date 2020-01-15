@@ -9,8 +9,8 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 import json
 
-from .models import User, Assessment_period, Team, TeamLeader
-from .serializers import UserSerializer, PeriodSerializer, TeamSerializer
+from .models import User, Assessment_period, Team, TeamLeader, Assessment
+from .serializers import UserSerializer, PeriodSerializer, TeamSerializer, AssessmentSerializer
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -149,8 +149,6 @@ class TeamViewSet(APIView):
 
         return Response({'lol': 'lol'})
 
-
-
 # class DirectManagerViewSet(viewsets.ModelViewSet):
 #     queryset = Direct_manager.objects.all()
 #     serializer_class = DirectManagerSerializer
@@ -209,3 +207,8 @@ class TeamViewSet(APIView):
 #         print(users_by_managers)
 
 #         return Response({'lol': 'lol'})
+
+class AssessmentViewSet(viewsets.ModelViewSet):
+        queryset = Assessment.objects.all()
+        serializer_class = AssessmentSerializer
+        
