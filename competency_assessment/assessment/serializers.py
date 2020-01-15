@@ -32,7 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class PeriodSerializer(serializers.ModelSerializer):
-    initiating_user = UserSerializer(many=True, read_only=True)
+    #initiating_user = UserSerializer(many=True, read_only=True)
     class Meta:
         model = Assessment_period
         fields = ('id', 'start_date', 'end_date', 'initiating_user') 
