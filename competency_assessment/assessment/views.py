@@ -82,6 +82,12 @@ class UserDetailsFromToken(RetrieveAPIView):
 class AssessmentPeriodViewSet(viewsets.ModelViewSet):
     queryset = Assessment_period.objects.all()
     serializer_class = PeriodSerializer
+
+    # def list(self, request, *args, **kwargs):
+    #     assessments_periods = Assessment_period.objects.all()
+    #     serializer = PeriodSerializer(assessments_periods, many=True)
+
+    #     return Response(serializer.data)
     def get_period(self,pk):
         try:
             return AssessmentPeriod.objects.get(pk=pk)
