@@ -123,4 +123,7 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
 class AssessmentViewSet(viewsets.ModelViewSet):
         queryset = Assessment.objects.all()
         serializer_class = AssessmentSerializer
-        
+
+class  RatingViewSet(viewsets.ModelViewSet):
+       queryset = Rating.objects.all()
+       serializer_class = RatingSerializer
