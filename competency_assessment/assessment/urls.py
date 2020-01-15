@@ -7,7 +7,8 @@ router.register(r'users', views.UserViewSet),
 router.register(r'assessment-period', views.AssessmentPeriodViewSet),
 router.register(r'assessments', views.AssessmentViewSet),
 router.register(r'ratings', views.RatingViewSet),
-router.register(r'assessment-results', views.AssessmentResultViewSet)
+router.register(r'assessment-results', views.AssessmentResultViewSet),
+router.register(r'competencies',views.CompetencyViewSet),
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', views.ObtainAuthTokenAndUserDetails.as_view()),
