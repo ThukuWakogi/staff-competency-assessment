@@ -68,7 +68,7 @@ class ResultsSerializer(serializers.ModelSerializer):
     rating = RatingSerializer(many=True,read_only=True)
     class Meta:
         model = Assessment_results
-        fields = ('user_id', 'assessment', 'competency', 'strand', 'rating')
+        fields = '__all__'
 
 class IdpSerializer(serializers.ModelSerializer):
     assessment = AssessmentSerializer(many=True, read_only=True)

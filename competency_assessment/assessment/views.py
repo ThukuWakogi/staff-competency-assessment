@@ -123,6 +123,6 @@ class  RatingViewSet(viewsets.ModelViewSet):
        queryset = Rating.objects.all()
        serializer_class = RatingSerializer
 
-class Assessment_resultsViewSet(viewsets.ModelViewSet):
+class AssessmentResultViewSet(viewsets.ModelViewSet):
        queryset = Assessment_results.objects.all()
        serializer_class = ResultsSerializer
