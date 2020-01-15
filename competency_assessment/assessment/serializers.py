@@ -58,6 +58,12 @@ class StrandSerializer(serializers.ModelSerializer):
         model = Strand
         fields = ('name', 'competency')
 
+class AssessmentSerializer(serializers.ModelSerializer):
+    # user_id = UserSerializer(many=True, read_only=True)
+    # assessment_period = PeriodSerializer(many=True, read_only=True)
+    class Meta:
+        model = Assessment 
+        fields = '__all__'
 
 class ResultsSerializer(serializers.ModelSerializer):
     # user_id = UserSerializer(many=True, read_only=True)
@@ -83,10 +89,3 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = AssessmentPeriod
         fields = ('id', 'start_date', 'end_date', 'initiating_user')     
 
-
-class AssessmentSerializer(serializers.ModelSerializer):
-    user_id = UserSerializer(many=True, read_only=True)
-    assessment_period = PeriodSerializer(many=True, read_only=True)
-    class Meta:
-        model = Assessment 
-        fields = ('user_id','assessment_period', 'is_assessed_by_manager', 'is_assessed_after_norming')
