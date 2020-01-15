@@ -7,8 +7,8 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from .models import User, Assessment_period
-from .serializers import UserSerializer, PeriodSerializer
+from .models import User, Assessment_period, Assessment
+from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -113,3 +113,9 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
         period = self.get_period(pk)  
         period.delete()   
         return Response (status=status.HTTP_204_NO_CONTENT)
+
+
+class AssessmentViewSet(viewsets.ModelViewSet):
+        queryset = Assessment.objects.all()
+        serializer_class = AssessmentSerializer
+        
