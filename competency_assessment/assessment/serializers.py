@@ -57,7 +57,7 @@ class CompetencySerializer(serializers.ModelSerializer):
         fields = ('name')  
 
 class StrandSerializer(serializers.ModelSerializer):
-    competency = CompetencySerializer(many=True, read_only=True)
+    # competency = CompetencySerializer(many=True, read_only=True)
     class Meta:
         model = Strand
         fields = ('name', 'competency')  
@@ -70,16 +70,16 @@ class AssessmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ResultsSerializer(serializers.ModelSerializer):
-    user_id = UserSerializer(many=True, read_only=True)
-    assessment = AssessmentSerializer(many=True, read_only=True)
-    strand = StrandSerializer(many=True,read_only=True)
-    rating = RatingSerializer(many=True,read_only=True)
+    # user_id = UserSerializer(many=True, read_only=True)
+    # assessment = AssessmentSerializer(many=True, read_only=True)
+    # strand = StrandSerializer(many=True,read_only=True)
+    # rating = RatingSerializer(many=True,read_only=True)
     class Meta:
         model = Assessment_results
         fields = '__all__'
 
 class IdpSerializer(serializers.ModelSerializer):
-    assessment = AssessmentSerializer(many=True, read_only=True)
+    # assessment = AssessmentSerializer(many=True, read_only=True)
     class Meta:
         model = Idp
-        fields = ('assessment', 'actions', 'resources', 'target', 'progress_indicator', 'nature_of_support')
+        fields = '__all__'
