@@ -84,7 +84,8 @@ class IdpSerializer(serializers.ModelSerializer):
         model = Idp
         fields = '__all__'
 
-class NotificationsSerializer(serializers.NotificationsSerializer):
+class NotificationSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = Notifications
+        model = Notification
         fields = '__all__'
