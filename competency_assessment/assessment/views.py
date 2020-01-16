@@ -9,10 +9,12 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
+from rest_framework.views import APIView
 
 from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
     CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer
+
 
 
 # Create your views here.
@@ -43,6 +45,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class ObtainAuthTokenAndUserDetails(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
+        print('lol')
         response = super(ObtainAuthTokenAndUserDetails, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         user = User.objects.get(id=token.user_id)
