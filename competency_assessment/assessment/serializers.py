@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Assessment_period, Rating, Competency, Strand, Assessment, Assessment_results, Idp
+from .models import User, Assessment_period, Rating, Competency, Strand, Assessment, Assessment_results, Idp, Notification
 
 # Create your views here.
 # Serializers define the API representation.
@@ -76,7 +76,8 @@ class IdpSerializer(serializers.ModelSerializer):
         model = Idp
         fields = '__all__'
 
-class NotificationsSerializer(serializers.NotificationsSerializer):
+class NotificationSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = Notifications
+        model = Notification
         fields = '__all__'
