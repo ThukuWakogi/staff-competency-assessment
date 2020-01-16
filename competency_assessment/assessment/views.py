@@ -143,4 +143,10 @@ class StrandViewSet(viewsets.ModelViewSet):
 class IdpViewSet(viewsets.ModelViewSet):
       queryset = Idp.objects.all()
       serializer_class = IdpSerializer 
+
+class NotificationsViewSet(viewsets.ModelViewSet):
+      queryset = Notification.objects.all()
+      serializer_class = NotificationSerializer 
+
+
      

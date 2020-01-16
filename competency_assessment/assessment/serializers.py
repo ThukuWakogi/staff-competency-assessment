@@ -81,11 +81,8 @@ class IdpSerializer(serializers.ModelSerializer):
         model = Idp
         fields = '__all__'
 
-
 class NotificationSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Notification
         fields = '__all__'
-        model = AssessmentPeriod
-        fields = ('id', 'start_date', 'end_date', 'initiating_user')     
-
