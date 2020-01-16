@@ -227,3 +227,8 @@ class CompetencyViewSet(viewsets.ModelViewSet):
 class StrandViewSet(viewsets.ModelViewSet):
       queryset = Strand.objects.all()
       serializer_class = StrandSerializer          
+
+class IdpViewSet(viewsets.ModelViewSet):
+      queryset = Idp.objects.all()
+      serializer_class = IdpSerializer 
+     
