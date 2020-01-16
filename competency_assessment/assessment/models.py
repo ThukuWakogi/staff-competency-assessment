@@ -22,9 +22,15 @@ class User(AbstractUser):
 class Competency(models.Model):
     name = models.CharField(max_length=250)
 
+    def __str__(self):
+        return self.name
+
 class Strand(models.Model):
     name = models.CharField(max_length=250)
     competency = models.ForeignKey(Competency, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
  
 
 class Assessment_period(models.Model):
@@ -36,9 +42,12 @@ class Assessment_period(models.Model):
 class Rating(models.Model):
     name =models.CharField(max_length=250)   
     rating = models.IntegerField()
+    
+    def __str__(self):
+        return self.name
 
 class Assessment(models.Model):
-    user_id = models
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     assessment_period = models.ForeignKey(Assessment_period, on_delete= models.CASCADE)
     is_assessed_by_manager = models.BooleanField(default=False)
     is_assessed_after_norming = models.BooleanField(default=False)
