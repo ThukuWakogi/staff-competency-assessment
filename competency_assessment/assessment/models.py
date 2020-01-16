@@ -92,6 +92,7 @@ class Assessment_period(models.Model):
     end_date = models.DateTimeField()
     initiating_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+
 class Rating(models.Model):
     name =models.CharField(max_length=250)   
     rating = models.IntegerField()
