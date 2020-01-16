@@ -58,6 +58,7 @@ class Assessment_results(models.Model):
     competency = models.ForeignKey(Competency, on_delete=models.CASCADE)
     strand =models.ForeignKey(Strand, on_delete=models.CASCADE)
     rating =models.ForeignKey(Rating, on_delete=models.CASCADE)
+    comments = models.TextField(blank=True)
 
 class Idp(models.Model):
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
