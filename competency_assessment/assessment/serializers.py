@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import User, Assessment_period
+from .models import User, AssessmentPeriod
+
 
 # Create your views here.
 # Serializers define the API representation.
@@ -31,7 +32,8 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+
 class PeriodSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Assessment_period
-        fields = ('id', 'start_date', 'end_date', 'initiating_user')     
+        model = AssessmentPeriod
+        fields = ('id', 'start_date', 'end_date', 'initiating_user')

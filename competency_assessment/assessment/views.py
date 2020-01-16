@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
@@ -6,9 +7,11 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import User, Assessment_period
+from .models import User, AssessmentPeriod
 from .serializers import UserSerializer, PeriodSerializer
+
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -31,13 +34,14 @@ class UserViewSet(viewsets.ModelViewSet):
                 'user': serializer.data,
                 'created': created
             },
-            status = status.HTTP_201_CREATED,
-            headers = headers
+            status=status.HTTP_201_CREATED,
+            headers=headers
         )
 
 
 class ObtainAuthTokenAndUserDetails(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
+        print('lol')
         response = super(ObtainAuthTokenAndUserDetails, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         user = User.objects.get(id=token.user_id)
@@ -79,31 +83,32 @@ class UserDetailsFromToken(RetrieveAPIView):
             }
         ))
 
+
 class AssessmentPeriodViewSet(viewsets.ModelViewSet):
-    queryset = Assessment_period.objects.all()
+    queryset = AssessmentPeriod.objects.all()
     serializer_class = PeriodSerializer
-    def get_period(self,pk):
+
+    def get_period(self, pk):
         try:
             return AssessmentPeriod.objects.get(pk=pk)
         except AssessmentPeriod.DoesNotExist:
-            return Http404 
+            return Http404
 
     def get(self, request, pk, format=None):
         period = self.get_period(pk)
-        serializers = PeriodSerializer(period) 
-        return Response(serializer.data)        
+        serializer = PeriodSerializer(period)
+        return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         period = self.get_period(pk)
-        serializers = PeriodSerializer(period,request.data)
+        serializers = PeriodSerializer(period, request.data)
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data)
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     def delete(self, request, pk, format=None):
-        period = self.get_period(pk)  
-        period.delete()   
-        return Response (status=status.HTTP_204_NO_CONTENT)
+        period = self.get_period(pk)
+        period.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
