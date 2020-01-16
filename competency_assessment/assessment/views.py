@@ -7,8 +7,8 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from .models import User, Assessment_period, Assessment, Rating, Assessment_results, Competency, Strand
-from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer,RatingSerializer,ResultsSerializer,CompetencySerializer, StrandSerializer
+from .models import User, Assessment_period, Assessment, Rating, Assessment_results, Competency, Strand, Idp
+from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer,RatingSerializer,ResultsSerializer,CompetencySerializer,IdpSerializer, StrandSerializer
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -134,3 +134,8 @@ class CompetencyViewSet(viewsets.ModelViewSet):
 class StrandViewSet(viewsets.ModelViewSet):
       queryset = Strand.objects.all()
       serializer_class = StrandSerializer          
+
+class IdpViewSet(viewsets.ModelViewSet):
+      queryset = Idp.objects.all()
+      serializer_class = IdpSerializer 
+     
