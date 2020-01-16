@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import User, AssessmentPeriod, Assessment, AssessmentResults, Idp, Strand, Competency, Rating, Notification
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import ugettext_lazy as _
+from .models import User, AssessmentPeriod
 
 
 @admin.register(User)

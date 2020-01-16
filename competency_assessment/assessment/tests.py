@@ -1,5 +1,5 @@
 import unittest
-from .models import Level, User, Competency, Strand, Assessment_period, Rating, Assessment, Assessment_results, Idp, Notifications, Direct_manager
+from .models import Level, User, Competency, Strand, AssessmentPeriod, Rating, Assessment, AssessmentResults, Idp, Notifications, DirectManager
 
 
 # Create your tests here.
@@ -102,13 +102,13 @@ class TestAssessment_period(unittest.TestCase):
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_assessment_period = Assessment_period('2020/02/01', '2020/02/05', self.new_user)
+        self.new_assessment_period = AssessmentPeriod('2020/02/01', '2020/02/05', self.new_user)
 
     def tearDown(self):
-        Assessment_period.objects.all().delete()
+        AssessmentPeriod.objects.all().delete()
 
     def test_instance(self):
-        self.assertTrue(isinstance(self.new_assessment_period, Assessment_period))
+        self.assertTrue(isinstance(self.new_assessment_period, AssessmentPeriod))
 
 
 class TestRating(unittest.TestCase):
@@ -132,7 +132,7 @@ class TestAssessment(unittest.TestCase):
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_assessment_period = Assessment_period('2020/02/01', '2020/02/05', self.new_user)
+        self.new_assessment_period = AssessmentPeriod('2020/02/01', '2020/02/05', self.new_user)
         self.new_assessment = Assessment(self.new_assessment_period, True, False)
 
     def tearDown(self):
@@ -150,18 +150,18 @@ class TestAssessment_results(unittest.TestCase):
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_assessment_period = Assessment_period('2020/02/01', '2020/02/05', self.new_user)
+        self.new_assessment_period = AssessmentPeriod('2020/02/01', '2020/02/05', self.new_user)
         self.new_assessment = Assessment(self.new_assessment_period, True, False)
         self.new_competency = Competency('teamwork')
         self.new_strand = Strand('exemplary', self.new_competency)
         self.new_rating = Rating('top', 2)
-        self.new_assessment_results = Assessment_results(self.new_assessment, 1, self.new_competency, self.new_strand, self.new_rating)
+        self.new_assessment_results = AssessmentResults(self.new_assessment, 1, self.new_competency, self.new_strand, self.new_rating)
 
     def tearDown(self):
-        Assessment_results.objects.all().delete()
+        AssessmentResults.objects.all().delete()
 
     def test_instance(self):
-        self.assertTrue(isinstance(self.new_assessment_results, Assessment_results))
+        self.assertTrue(isinstance(self.new_assessment_results, AssessmentResults))
 
 
 class TestIdp(unittest.TestCase):
@@ -171,7 +171,7 @@ class TestIdp(unittest.TestCase):
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_assessment_period = Assessment_period('2020/02/01', '2020/02/05', self.new_user)
+        self.new_assessment_period = AssessmentPeriod('2020/02/01', '2020/02/05', self.new_user)
         self.new_assessment = Assessment(self.new_assessment_period, True, False)
         self.new_idp = Idp(self.new_assessment, 'This is an action', 'This is a resource', 'This is a target', 'This is a progress indicator', 'This is a nature of support')
 
@@ -201,10 +201,10 @@ class TestDirect_manager(unittest.TestCase):
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_direct_manager = Direct_manager(2, 'direct manager')
+        self.new_direct_manager = DirectManager(2, 'direct manager')
 
     def tearDown(self):
-        Direct_manager.objects.all().delete()
+        DirectManager.objects.all().delete()
 
     def test_instance(self):
-        self.assertTrue(isinstance(self.new_direct_manager, Direct_manager))
+        self.assertTrue(isinstance(self.new_direct_manager, DirectManager))
