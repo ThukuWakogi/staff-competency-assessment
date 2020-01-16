@@ -16,7 +16,6 @@ from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer,
     CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer
 
 
-
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -92,11 +91,6 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
     queryset = AssessmentPeriod.objects.all()
     serializer_class = PeriodSerializer
 
-    # def list(self, request, *args, **kwargs):
-    #     assessments_periods = Assessment_period.objects.all()
-    #     serializer = PeriodSerializer(assessments_periods, many=True)
-
-    #     return Response(serializer.data)
     def get_period(self, pk):
         try:
             return AssessmentPeriod.objects.get(pk=pk)
@@ -121,63 +115,3 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
         period = self.get_period(pk)
         period.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class AssessmentViewSet(viewsets.ModelViewSet):
-    queryset = Assessment.objects.all()
-    serializer_class = AssessmentSerializer
-
-    def create(self, request, *args, **kwargs):
-        user = User.objects.get(email=request.data['user_email'])
-        assessment_period = AssessmentPeriod.objects.get(pk=request.data['assessment_period'])
-        assessment = Assessment.objects.create(user_id=user, assessment_period=assessment_period)
-        results = []
-
-        for result in request.data['results']:
-            print(result['competency']['id'])
-            competency = Competency.objects.get(pk=result['competency']['id'])
-            for strand in result['competency']['strands']:
-                _strand = Strand.objects.get(pk=strand['id'])
-                rating = Rating.objects.get(pk=strand['rating_id'])
-                results.append(
-                    AssessmentResults(assessment=assessment, user_id=user, competency=competency, strand=_strand,
-                                      rating=rating))
-
-        AssessmentResults.objects.bulk_create(results)
-        posted_results = {
-            'user_email': user.email,
-            'assessment_period': assessment_period.id,
-            'assessment_id': assessment.id
-        }
-
-        return Response(posted_results)
-
-
-class RatingViewSet(viewsets.ModelViewSet):
-    queryset = Rating.objects.all()
-    serializer_class = RatingSerializer
-
-
-class AssessmentResultViewSet(viewsets.ModelViewSet):
-    queryset = AssessmentResults.objects.all()
-    serializer_class = ResultsSerializer
-
-
-class CompetencyViewSet(viewsets.ModelViewSet):
-    queryset = Competency.objects.all()
-    serializer_class = CompetencySerializer
-
-
-class StrandViewSet(viewsets.ModelViewSet):
-    queryset = Strand.objects.all()
-    serializer_class = StrandSerializer
-
-
-class IdpViewSet(viewsets.ModelViewSet):
-    queryset = Idp.objects.all()
-    serializer_class = IdpSerializer
-
-
-class NotificationsViewSet(viewsets.ModelViewSet):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializer
