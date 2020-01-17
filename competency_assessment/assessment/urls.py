@@ -5,11 +5,11 @@ from competency_assessment.assessment import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet),
 router.register(r'assessment-period', views.AssessmentPeriodViewSet),
-# router.register(r'direct-manager', views.UsersByManagers)
+# router.register(r'team', views.TeamViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', views.ObtainAuthTokenAndUserDetails.as_view()),
     path('udft/', views.UserDetailsFromToken.as_view()),
-    path('usersbymanager/', views.UsersByManagers.as_view())
+    path('usersbymanager/', views.TeamViewSet.as_view()),
 ]

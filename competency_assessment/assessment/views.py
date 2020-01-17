@@ -7,9 +7,10 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+import json
 
-from .models import User, Assessment_period, Direct_manager
-from .serializers import UserSerializer, PeriodSerializer, DirectManagerSerializer
+from .models import User, Assessment_period, Team, TeamLeader
+from .serializers import UserSerializer, PeriodSerializer, TeamSerializer
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -110,6 +111,39 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
         return Response (status=status.HTTP_204_NO_CONTENT)
 
 
+class TeamViewSet(APIView):
+    # queryset = Team.objects.all()
+    # serializer_class = TeamSerializer
+
+    def get(self, request, format=None):
+        managers = TeamLeader.objects.all()
+        managers_emails = set()
+        users_by_managers = {}
+
+        for manager in managers:
+            #print(manager.manager)
+            managers_emails.add(manager.user)
+
+        for email in managers_emails:
+            manager = User.objects.get(email=email)
+            print(manager)
+            
+            # staff_email = Team.objects.filter(users_in_team=manager)
+
+            # for staff in staff_email:
+            #     print('    ' + str(staff.user_id))
+            #     user = User.objects.get(email=staff)
+            #     print(user.__dict__)
+
+        # # users_by_managers = dict.keys('manager', 'staff_under_manager')
+        # users_by_managers['manager'] = manager
+        # users_by_managers['staff'] = staff.user_id
+
+        # print(users_by_managers)
+
+        return Response({'lol': 'lol'})
+
+
 
 # class DirectManagerViewSet(viewsets.ModelViewSet):
 #     queryset = Direct_manager.objects.all()
@@ -127,7 +161,7 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
 #                 'name': dict(manager)['name'],
 #                 'staff': {
 #                     'id': staff.id,
-#                     'last_login': staff.last_login,
+#                   manager  'last_login': staff.last_login,
 #                     'is_superuser': staff.is_superuser,
 #                     'first_name': staff.first_name,
 #                     'last_name': staff.last_name,
@@ -140,25 +174,32 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
 
 #         return Response(managers_expanded)
 
+#**********************************************************************8
 
-class UsersByManagers(APIView):
-    def get(self, request, format=None):
-        managers = Direct_manager.objects.all()
-        managers_emails = set()
-        users_by_managers = {}
+# class UsersByManagers(APIView):
+#     def get(self, request, format=None):
+#         managers = Direct_manager.objects.all()
+#         managers_emails = set()
+#         users_by_managers = {}
 
-        for manager in managers:
-            #print(manager.manager)
-            managers_emails.add(manager.manager)
+#         for manager in managers:
+#             #print(manager.manager)
+#             managers_emails.add(manager.manager)
 
-        for email in managers_emails:
-            manager = User.objects.get(email=email)
-            print(manager)
-            staff_email = Direct_manager.objects.filter(manager=manager)
+#         for email in managers_emails:
+#             manager = User.objects.get(email=email)
+#             print(manager)
+#             staff_email = Direct_manager.objects.filter(manager=manager)
 
-            for staff in staff_email:
-                print('    ' + str(staff.user_id))
-                user = User.objects.get(email=staff)
-                print(user.__dict__)
+#             for staff in staff_email:
+#                 print('    ' + str(staff.user_id))
+#             #     user = User.objects.get(email=staff)
+#             #     print(user.__dict__)
 
-        return Response({'lol': 'lol'})
+#         # users_by_managers = dict.keys('manager', 'staff_under_manager')
+#         users_by_managers['manager'] = manager
+#         users_by_managers['staff'] = staff.user_id
+
+#         print(users_by_managers)
+
+#         return Response({'lol': 'lol'})
