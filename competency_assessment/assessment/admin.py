@@ -28,7 +28,7 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ('email',)
 
 
-admin.site.register(User)
+# admin.site.register(User)
 admin.site.register(AssessmentPeriod)
 admin.site.register(Assessment)
 admin.site.register(Competency)

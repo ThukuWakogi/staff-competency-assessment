@@ -8,18 +8,12 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
-<<<<<<< HEAD
 
 from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
     CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer
 
 
-=======
-
-from .models import User, AssessmentPeriod
-from .serializers import UserSerializer, PeriodSerializer
->>>>>>> dcd6aac3151475dda9d03f07ec1141a6de9fe6f1
 
 
 # Create your views here.
@@ -97,14 +91,11 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
     queryset = AssessmentPeriod.objects.all()
     serializer_class = PeriodSerializer
 
-<<<<<<< HEAD
     # def list(self, request, *args, **kwargs):
     #     assessments_periods = Assessment_period.objects.all()
     #     serializer = PeriodSerializer(assessments_periods, many=True)
 
     #     return Response(serializer.data)
-=======
->>>>>>> dcd6aac3151475dda9d03f07ec1141a6de9fe6f1
     def get_period(self, pk):
         try:
             return AssessmentPeriod.objects.get(pk=pk)
@@ -142,7 +133,6 @@ class AssessmentViewSet(viewsets.ModelViewSet):
         results = []
 
         for result in request.data['results']:
-            print(result['competency']['id'])
             competency = Competency.objects.get(pk=result['competency']['id'])
             for strand in result['competency']['strands']:
                 _strand = Strand.objects.get(pk=strand['id'])
