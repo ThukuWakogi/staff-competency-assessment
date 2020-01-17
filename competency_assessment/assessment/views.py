@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
@@ -8,7 +9,9 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 
 from .models import *
-from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer,RatingSerializer,ResultsSerializer,CompetencySerializer,IdpSerializer, StrandSerializer, NotificationSerializer
+from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
+    CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer
+
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -31,8 +34,8 @@ class UserViewSet(viewsets.ModelViewSet):
                 'user': serializer.data,
                 'created': created
             },
-            status = status.HTTP_201_CREATED,
-            headers = headers
+            status=status.HTTP_201_CREATED,
+            headers=headers
         )
 
 
@@ -79,8 +82,9 @@ class UserDetailsFromToken(RetrieveAPIView):
             }
         ))
 
+
 class AssessmentPeriodViewSet(viewsets.ModelViewSet):
-    queryset = Assessment_period.objects.all()
+    queryset = AssessmentPeriod.objects.all()
     serializer_class = PeriodSerializer
 
     # def list(self, request, *args, **kwargs):
@@ -88,84 +92,87 @@ class AssessmentPeriodViewSet(viewsets.ModelViewSet):
     #     serializer = PeriodSerializer(assessments_periods, many=True)
 
     #     return Response(serializer.data)
-    def get_period(self,pk):
+    def get_period(self, pk):
         try:
             return AssessmentPeriod.objects.get(pk=pk)
         except AssessmentPeriod.DoesNotExist:
-            return Http404 
+            return Http404
 
     def get(self, request, pk, format=None):
         period = self.get_period(pk)
-        serializers = PeriodSerializer(period) 
-        return Response(serializer.data)        
+        serializer = PeriodSerializer(period)
+        return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         period = self.get_period(pk)
-        serializers = PeriodSerializer(period,request.data)
+        serializers = PeriodSerializer(period, request.data)
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data)
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     def delete(self, request, pk, format=None):
-        period = self.get_period(pk)  
-        period.delete()   
-        return Response (status=status.HTTP_204_NO_CONTENT)
+        period = self.get_period(pk)
+        period.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AssessmentViewSet(viewsets.ModelViewSet):
-        queryset = Assessment.objects.all()
-        serializer_class = AssessmentSerializer
+    queryset = Assessment.objects.all()
+    serializer_class = AssessmentSerializer
 
-        def create(self, request, *args, **kwargs):
-            user = User.objects.get(email=request.data['user_email'])
-            assessment_period = Assessment_period.objects.get(pk=request.data['assessment_period'])
-            assessment = Assessment.objects.create(user_id=user, assessment_period=assessment_period)
-            results = []
+    def create(self, request, *args, **kwargs):
+        user = User.objects.get(email=request.data['user_email'])
+        assessment_period = AssessmentPeriod.objects.get(pk=request.data['assessment_period'])
+        assessment = Assessment.objects.create(user_id=user, assessment_period=assessment_period)
+        results = []
 
-            for result in request.data['results']:
-                print(result['competency']['id'])
-                competency = Competency.objects.get(pk=result['competency']['id'])
-                for strand in result['competency']['strands']:
-                    _strand = Strand.objects.get(pk=strand['id'])
-                    rating = Rating.objects.get(pk=strand['rating_id'])
-                    results.append(Assessment_results(assessment=assessment, user_id=user, competency=competency, strand=_strand, rating=rating))
+        for result in request.data['results']:
+            print(result['competency']['id'])
+            competency = Competency.objects.get(pk=result['competency']['id'])
+            for strand in result['competency']['strands']:
+                _strand = Strand.objects.get(pk=strand['id'])
+                rating = Rating.objects.get(pk=strand['rating_id'])
+                results.append(
+                    AssessmentResults(assessment=assessment, user_id=user, competency=competency, strand=_strand,
+                                      rating=rating))
 
-            Assessment_results.objects.bulk_create(results)
-            posted_results = {
-                'user_email': user.email,
-                'assessment_period': assessment_period.id,
-                'assessment_id': assessment.id
-            }
+        AssessmentResults.objects.bulk_create(results)
+        posted_results = {
+            'user_email': user.email,
+            'assessment_period': assessment_period.id,
+            'assessment_id': assessment.id
+        }
 
-            return Response(posted_results)
+        return Response(posted_results)
 
-        
-class  RatingViewSet(viewsets.ModelViewSet):
-       queryset = Rating.objects.all()
-       serializer_class = RatingSerializer
+
+class RatingViewSet(viewsets.ModelViewSet):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+
 
 class AssessmentResultViewSet(viewsets.ModelViewSet):
-       queryset = Assessment_results.objects.all()
-       serializer_class = ResultsSerializer
+    queryset = AssessmentResults.objects.all()
+    serializer_class = ResultsSerializer
+
 
 class CompetencyViewSet(viewsets.ModelViewSet):
-       queryset = Competency.objects.all()
-       serializer_class = CompetencySerializer  
+    queryset = Competency.objects.all()
+    serializer_class = CompetencySerializer
+
 
 class StrandViewSet(viewsets.ModelViewSet):
-      queryset = Strand.objects.all()
-      serializer_class = StrandSerializer          
+    queryset = Strand.objects.all()
+    serializer_class = StrandSerializer
+
 
 class IdpViewSet(viewsets.ModelViewSet):
-      queryset = Idp.objects.all()
-      serializer_class = IdpSerializer 
+    queryset = Idp.objects.all()
+    serializer_class = IdpSerializer
+
 
 class NotificationsViewSet(viewsets.ModelViewSet):
-      queryset = Notification.objects.all()
-      serializer_class = NotificationSerializer 
-
-
-     
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer

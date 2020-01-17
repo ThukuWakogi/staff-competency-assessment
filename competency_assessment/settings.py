@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'competency_assessment.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'assessment',
-        'USER': 'nancy',
-        'PASSWORD': 'nkm',
+        'NAME': os.environ['DB_NAME'] if 'DB_NAME' in os.environ else None,
+        'USER': os.environ['DB_USER'] if 'DB_USER' in os.environ else None,
+        'PASSWORD': os.environ['DB_PASSWORD'] if 'DB_PASSWORD' in os.environ else None,
     }
 }
 
