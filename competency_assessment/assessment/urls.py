@@ -12,6 +12,7 @@ router.register(r'competencies',views.CompetencyViewSet),
 router.register(r'strands', views.StrandViewSet),
 router.register(r'idps', views.IdpViewSet),
 router.register(r'notifications', views.NotificationsViewSet)
+
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', views.ObtainAuthTokenAndUserDetails.as_view()),
