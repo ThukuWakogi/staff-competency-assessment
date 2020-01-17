@@ -89,7 +89,7 @@ class Idp(models.Model):
     target = models.CharField(max_length=250)
     progress_indicator = models.CharField(max_length=500)
     nature_of_support = models.TextField()
-
+        
 
 class Notification(models.Model):
     sender = models.CharField(max_length=200)
