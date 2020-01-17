@@ -7,7 +7,7 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from .models import User, Assessment_period, Assessment, Rating, Assessment_results, Competency, Strand, Idp, Notification
+from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer,RatingSerializer,ResultsSerializer,CompetencySerializer,IdpSerializer, StrandSerializer, NotificationSerializer
 
 # Create your views here.
@@ -119,6 +119,30 @@ class AssessmentViewSet(viewsets.ModelViewSet):
         queryset = Assessment.objects.all()
         serializer_class = AssessmentSerializer
 
+        def create(self, request, *args, **kwargs):
+            user = User.objects.get(email=request.data['user_email'])
+            assessment_period = Assessment_period.objects.get(pk=request.data['assessment_period'])
+            assessment = Assessment.objects.create(user_id=user, assessment_period=assessment_period)
+            results = []
+
+            for result in request.data['results']:
+                print(result['competency']['id'])
+                competency = Competency.objects.get(pk=result['competency']['id'])
+                for strand in result['competency']['strands']:
+                    _strand = Strand.objects.get(pk=strand['id'])
+                    rating = Rating.objects.get(pk=strand['rating_id'])
+                    results.append(Assessment_results(assessment=assessment, user_id=user, competency=competency, strand=_strand, rating=rating))
+
+            Assessment_results.objects.bulk_create(results)
+            posted_results = {
+                'user_email': user.email,
+                'assessment_period': assessment_period.id,
+                'assessment_id': assessment.id
+            }
+
+            return Response(posted_results)
+
+        
 class  RatingViewSet(viewsets.ModelViewSet):
        queryset = Rating.objects.all()
        serializer_class = RatingSerializer
