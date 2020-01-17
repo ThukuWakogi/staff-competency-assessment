@@ -12,7 +12,6 @@ router.register(r'competencies',views.CompetencyViewSet),
 router.register(r'strands', views.StrandViewSet),
 router.register(r'idps', views.IdpViewSet),
 router.register(r'notifications', views.NotificationsViewSet)
-router.register(r'managers/users', views.UsersByManager, basename='usersbymanager')
 
 urlpatterns = [
     path('', include(router.urls)),
