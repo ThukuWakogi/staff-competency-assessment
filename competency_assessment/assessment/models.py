@@ -9,9 +9,6 @@ class Level(models.Model):
     name = models.CharField(max_length=60)
     job_grade = models.IntegerField()
 
-class Direct_manager(models.Model):
-    manager = models.CharField(max_length=250)
-
 
 class UserManager(BaseUserManager):
     """
@@ -59,7 +56,6 @@ class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     level = models.ForeignKey('Level', blank=True, null=True, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
-    direct_manager = models.ForeignKey(Direct_manager, on_delete=models.CASCADE, default=None)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -69,6 +65,18 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+class TeamLeader(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staff')
+
+class Team(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    description = models.TextField(max_length=1024)
+    users_in_team = models.ManyToManyField(User, related_name='team')
+    team_leader = models.OneToOneField(TeamLeader, on_delete=models.CASCADE, primary_key=True, related_name='team')
+
+    def __str__(self):
+        return self.name
 
 
 class Competency(models.Model):
@@ -89,14 +97,14 @@ class Rating(models.Model):
     rating = models.IntegerField()
 
 class Assessment(models.Model):
-    user_id = models
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE) # user being rated
     assessment_period = models.ForeignKey(Assessment_period, on_delete= models.CASCADE)
     is_assessed_by_manager = models.BooleanField(default=False)
     is_assessed_after_norming = models.BooleanField(default=False)
 
 class Assessment_results(models.Model):
     assessment =models.ForeignKey(Assessment, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='results') # Not the user being rated, rather the user rating
     competency = models.ForeignKey(Competency, on_delete=models.CASCADE)
     strand =models.ForeignKey(Strand, on_delete=models.CASCADE)
     rating =models.ForeignKey(Rating, on_delete=models.CASCADE)
@@ -115,5 +123,3 @@ class Notifications(models.Model):
     receiver = models.CharField(max_length=200)  
     action = models.CharField(max_length=250)
     is_seen = models.CharField(max_length=200)
-
-
