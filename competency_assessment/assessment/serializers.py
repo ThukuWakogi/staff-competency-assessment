@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Assessment_period, Direct_manager
+from .models import User, Assessment_period, Team
 
 # Create your views here.
 # Serializers define the API representation.
@@ -37,8 +37,8 @@ class PeriodSerializer(serializers.ModelSerializer):
         fields = ('id', 'start_date', 'end_date', 'initiating_user') 
 
 
-class DirectManagerSerializer(serializers.ModelSerializer):
+class TeamSerializer(serializers.ModelSerializer):
     # users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     class Meta:
-        model = Direct_manager
+        model = Team
         fields = '__all__'
