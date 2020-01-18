@@ -27,7 +27,7 @@ class UserAdmin(DjangoUserAdmin):
 
 admin.site.register(Team)
 admin.site.register(TeamLeader)
-admin.site.register(User)
+# admin.site.register(User)
 admin.site.register(AssessmentPeriod)
 admin.site.register(Assessment)
 admin.site.register(Competency)
