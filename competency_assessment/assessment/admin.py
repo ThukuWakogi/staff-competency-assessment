@@ -36,4 +36,5 @@ admin.site.register(Rating)
 admin.site.register(AssessmentResults)
 admin.site.register(Notification)
 admin.site.register(Idp)
+admin.site.register(DirectManager)
 admin.site.site_header = "HR Dashboard"

@@ -8,7 +8,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-import json
+from rest_framework.viewsets import ViewSet
 
 from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
@@ -269,3 +269,30 @@ class IdpViewSet(viewsets.ModelViewSet):
 class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+
+
+class UsersByManager(ViewSet):
+    queryset = DirectManager.objects.all()
+
+    def list(self, request):
+        managers = set()
+        users_by_manager = {}
+        # print(self.queryset)
+
+        for result in self.queryset:
+            managers.add(result.manager)
+
+        for manager in managers:
+            users = []
+            print(manager)
+
+            for staff in self.queryset:
+                # print(staff)
+                if staff.manager.email == manager.email:
+                    # users.append(staff)
+                    print('  ' + staff.user_id.email)
+
+            # for user in users:
+            #     print(user.user_id)
+
+        return Response({'': ''})
