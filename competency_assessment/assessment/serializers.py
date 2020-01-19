@@ -34,11 +34,10 @@ class UserSerializer(serializers.ModelSerializer):
 class PeriodSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assessment_period
-        fields = ('id', 'start_date', 'end_date', 'initiating_user') 
+        fields = '__all__'
 
 
 class TeamSerializer(serializers.ModelSerializer):
-    # users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     class Meta:
         model = Team
         fields = '__all__'
