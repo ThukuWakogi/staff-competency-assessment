@@ -173,3 +173,51 @@ class IdpViewSet(viewsets.ModelViewSet):
 class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+
+
+class UsersByManager(ViewSet):
+    queryset = DirectManager.objects.all()
+
+    def list(self, request):
+        managers = set()
+        users_by_manager = []
+
+        for result in self.queryset: managers.add(result.manager)
+
+        for manager in managers:
+            users = []
+
+            for staff in self.queryset:
+                if staff.manager.email == manager.email:
+                    users.append(
+                        {
+                            "id": staff.user_id.id,
+                            "last_login": staff.user_id.last_login,
+                            "is_superuser": staff.user_id.is_superuser,
+                            "first_name": staff.user_id.first_name,
+                            "last_name": staff.user_id.last_name,
+                            "is_staff": staff.user_id.is_staff,
+                            "is_active": staff.user_id.is_active,
+                            "email": staff.user_id.email,
+                            "date_joined": staff.user_id.date_joined,
+                            "level": staff.user_id.level,
+                        }
+                    )
+
+            users_by_manager.append({
+                "manager": {
+                    "id": manager.id,
+                    "last_login": manager.last_login,
+                    "is_superuser": manager.is_superuser,
+                    "first_name": manager.first_name,
+                    "last_name": manager.last_name,
+                    "is_staff": manager.is_staff,
+                    "is_active": manager.is_active,
+                    "email": manager.email,
+                    "date_joined": manager.date_joined,
+                    "level": manager.level,
+                    "staff": users
+                }
+            })
+
+        return Response(users_by_manager)
