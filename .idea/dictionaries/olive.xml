@@ -4,7 +4,9 @@
       <w>authtoken</w>
       <w>cors</w>
       <w>corsheaders</w>
+      <w>idps</w>
       <w>udft</w>
+      <w>usersbymanager</w>
     </words>
   </dictionary>
 </component>
