@@ -9,7 +9,6 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from rest_framework.views import APIView
 
 from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \

@@ -98,7 +98,6 @@ class TestStrand(unittest.TestCase):
     def test_instance(self):
         self.assertTrue(isinstance(self.new_strand, Strand))
 
-
 class TestAssessment_period(unittest.TestCase):
     """
     Class to test behaviour of the Assessment_period class.
@@ -162,12 +161,7 @@ class TestAssessment_results(unittest.TestCase):
         self.new_competency = Competency('teamwork')
         self.new_strand = Strand('exemplary', self.new_competency)
         self.new_rating = Rating('top', 2)
-<<<<<<< HEAD
-        self.new_assessment_results = AssessmentResults(self.new_assessment, 1, self.new_competency, self.new_strand,
-                                                        self.new_rating)
-=======
         self.new_assessment_results = AssessmentResults(self.new_assessment, 1, self.new_competency, self.new_strand, self.new_rating)
->>>>>>> configure cors
 
     def tearDown(self):
         AssessmentResults.objects.all().delete()
@@ -221,8 +215,4 @@ class TestDirectManager(unittest.TestCase):
         DirectManager.objects.all().delete()
 
     def test_instance(self):
-<<<<<<< HEAD
         self.assertTrue(isinstance(self.new_direct_manager, DirectManager))
-=======
-        self.assertTrue(isinstance(self.new_direct_manager, DirectManager))
->>>>>>> configure cors
