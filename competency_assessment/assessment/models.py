@@ -67,14 +67,18 @@ class User(AbstractUser):
 
 
 class TeamLeader(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staff')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='team_staff')
 
 
 class Team(models.Model):
     name = models.CharField(max_length=64, unique=True)
     description = models.TextField(max_length=1024)
     users_in_team = models.ManyToManyField(User, related_name='team')
-    team_leader = models.OneToOneField(TeamLeader, on_delete=models.CASCADE, primary_key=True, related_name='team')
+    team_leader = models.OneToOneField(
+        TeamLeader, on_delete=models.CASCADE,
+        primary_key=True,
+        related_name='team_leader'
+    )
 
     def __str__(self):
         return self.name
