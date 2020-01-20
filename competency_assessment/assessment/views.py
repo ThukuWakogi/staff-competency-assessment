@@ -43,7 +43,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class ObtainAuthTokenAndUserDetails(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        print('lol')
         response = super(ObtainAuthTokenAndUserDetails, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         user = User.objects.get(id=token.user_id)
@@ -60,7 +59,10 @@ class ObtainAuthTokenAndUserDetails(ObtainAuthToken):
                 'is_staff': user.is_staff,
                 'date_joined': user.date_joined,
                 'email': user.email,
-                'level': user.level
+                'level': user.level,
+                'is_manager':
+                    False
+                    if len([manager.user_id for manager in DirectManager.objects.filter(manager=user)]) == 0 else True
             }
         })
 
@@ -81,7 +83,11 @@ class UserDetailsFromToken(RetrieveAPIView):
                 'is_staff': request.user.is_staff,
                 'date_joined': request.user.date_joined,
                 'email': request.user.email,
-                'level': request.user.level
+                'level': request.user.level,
+                'is_manager':
+                    False
+                    if len([manager.user_id for manager in DirectManager.objects.filter(manager=request.user)]) == 0
+                    else True
             }
         ))
 
