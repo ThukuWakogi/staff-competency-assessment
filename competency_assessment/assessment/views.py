@@ -12,7 +12,7 @@ from rest_framework.viewsets import ViewSet
 
 from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
-    CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer
+    CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer, AssessmentPeriodSerializer
 
 
 # Create your views here.
@@ -50,16 +50,7 @@ class ObtainAuthTokenAndUserDetails(ObtainAuthToken):
         return Response({
             'token': token.key,
             'user': {
-                'id': user.id,
-                'last_login': user.last_login,
-                'is_superuser': user.is_superuser,
-                'username': user.username,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'is_staff': user.is_staff,
-                'date_joined': user.date_joined,
-                'email': user.email,
-                'level': user.level,
+                **UserSerializer(user).data,
                 'is_manager':
                     False
                     if len([manager.user_id for manager in DirectManager.objects.filter(manager=user)]) == 0 else True
@@ -74,16 +65,7 @@ class UserDetailsFromToken(RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         return Response(dict(
             user={
-                'id': request.user.id,
-                'last_login': request.user.last_login,
-                'is_superuser': request.user.is_superuser,
-                'username': request.user.username,
-                'first_name': request.user.first_name,
-                'last_name': request.user.last_name,
-                'is_staff': request.user.is_staff,
-                'date_joined': request.user.date_joined,
-                'email': request.user.email,
-                'level': request.user.level,
+                **UserSerializer(request.user).data,
                 'is_manager':
                     False
                     if len([manager.user_id for manager in DirectManager.objects.filter(manager=request.user)]) == 0
@@ -202,35 +184,24 @@ class UsersByManager(ViewSet):
 
             for staff in self.queryset:
                 if staff.manager.email == manager.email:
-                    users.append(
-                        {
-                            "id": staff.user_id.id,
-                            "last_login": staff.user_id.last_login,
-                            "is_superuser": staff.user_id.is_superuser,
-                            "first_name": staff.user_id.first_name,
-                            "last_name": staff.user_id.last_name,
-                            "is_staff": staff.user_id.is_staff,
-                            "is_active": staff.user_id.is_active,
-                            "email": staff.user_id.email,
-                            "date_joined": staff.user_id.date_joined,
-                            "level": staff.user_id.level,
-                        }
-                    )
+                    users.append({**UserSerializer(staff.user_id).data})
 
             users_by_manager.append({
                 "manager": {
-                    "id": manager.id,
-                    "last_login": manager.last_login,
-                    "is_superuser": manager.is_superuser,
-                    "first_name": manager.first_name,
-                    "last_name": manager.last_name,
-                    "is_staff": manager.is_staff,
-                    "is_active": manager.is_active,
-                    "email": manager.email,
-                    "date_joined": manager.date_joined,
-                    "level": manager.level,
+                    **UserSerializer(manager).data,
                     "staff": users
                 }
             })
 
         return Response(users_by_manager)
+
+
+class AssessmentPeriodSummary(ViewSet):
+    queryset = AssessmentPeriod.objects.all()
+
+    def list(self, request):
+        return Response({
+            'from': 'Assessment period summary',
+            'total_assessment_periods': len(self.queryset),
+            'previous_assessment_period': {**AssessmentPeriodSerializer(self.queryset.last()).data}
+        })
