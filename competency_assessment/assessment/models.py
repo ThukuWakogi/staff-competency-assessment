@@ -52,7 +52,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    username = None
+    username = models.TextField(max_length=1024)
     email = models.EmailField(_('email address'), unique=True)
     level = models.ForeignKey('Level', blank=True, null=True, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
