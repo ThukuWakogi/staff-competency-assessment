@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -138,8 +138,14 @@ class AssessmentViewSet(viewsets.ModelViewSet):
                 _strand = Strand.objects.get(pk=strand['id'])
                 rating = Rating.objects.get(pk=strand['rating_id'])
                 results.append(
-                    AssessmentResults(assessment=assessment, user_id=user, competency=competency, strand=_strand,
-                                      rating=rating))
+                    AssessmentResults(
+                        assessment=assessment,
+                        user_id=user,
+                        competency=competency,
+                        strand=_strand,
+                        rating=rating
+                    )
+                )
 
         AssessmentResults.objects.bulk_create(results)
         posted_results = {
@@ -188,7 +194,8 @@ class UsersByManager(ViewSet):
         managers = set()
         users_by_manager = []
 
-        for result in self.queryset: managers.add(result.manager)
+        for result in self.queryset:
+            managers.add(result.manager)
 
         for manager in managers:
             users = []
