@@ -1,7 +1,5 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
-from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -9,6 +7,7 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
+from datetime import datetime
 
 from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
@@ -201,7 +200,13 @@ class AssessmentPeriodSummary(ViewSet):
 
     def list(self, request):
         return Response({
-            'from': 'Assessment period summary',
             'total_assessment_periods': len(self.queryset),
-            'previous_assessment_period': {**AssessmentPeriodSerializer(self.queryset.last()).data}
+            'previous_assessment_period': {
+                **AssessmentPeriodSerializer(self.queryset.last()).data,
+                'has_ended': datetime(
+                    self.queryset.last().end_date.year,
+                    self.queryset.last().end_date.month,
+                    self.queryset.last().end_date.day
+                ) < datetime.now()
+            },
         })
