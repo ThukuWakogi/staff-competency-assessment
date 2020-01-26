@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import ugettext_lazy as _
 from .models import *
 
+
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     """
@@ -25,9 +26,9 @@ class UserAdmin(DjangoUserAdmin):
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
 
+
 admin.site.register(Team)
 admin.site.register(TeamLeader)
-# admin.site.register(User)
 admin.site.register(AssessmentPeriod)
 admin.site.register(Assessment)
 admin.site.register(Competency)

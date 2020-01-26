@@ -102,6 +102,7 @@ class Strand(models.Model):
 class AssessmentPeriod(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    is_marked_as_ended = models.BooleanField(default=False)
     initiating_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
@@ -127,6 +128,7 @@ class AssessmentResults(models.Model):
     strand = models.ForeignKey(Strand, on_delete=models.CASCADE)
     rating = models.ForeignKey(Rating, on_delete=models.CASCADE)
     comments = models.TextField(blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
 
 
 class Idp(models.Model):
