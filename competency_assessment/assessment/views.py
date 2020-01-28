@@ -144,6 +144,39 @@ class AssessmentViewSet(viewsets.ModelViewSet):
 
         return Response(posted_results)
 
+    def retrieve(self, request, pk=None):
+        # user = User.objects.get(email=request.data['user_email'])
+        # assessment_period = AssessmentPeriod.objects.get(pk=request.data['assessment_period'])
+        # assessment = Assessment.objects.create(user_id=user, assessment_period=assessment_period)
+        # results = []
+        # print(AssessmentResults.objects.filter(assessment__id=pk))
+
+        # for result in request.data['results']:
+        #     competency = Competency.objects.get(pk=result['competency']['id'])
+        #     for strand in result['competency']['strands']:
+        #         _strand = Strand.objects.get(pk=strand['id'])
+        #         rating = Rating.objects.get(pk=strand['rating_id'])
+        #         results.append(
+        #             AssessmentResults(assessment=assessment, user_id=user, competency=competency, strand=_strand,
+        #                               rating=rating))
+
+        # AssessmentResults.objects.bulk_create(results)
+        # posted_results = {
+        #     'user_email': user.email,
+        #     'assessment_period': assessment_period.id,
+        #     'assessment_id': assessment.id
+        # }
+
+        # return Response (posted_results)
+
+        assessment = Assessment.objects.get(pk=pk)
+        users_results = AssessmentResults.objects.filter(assessment=assessment)
+        for assess_result in AssessmentResults.objects.all().distinct('user_id'):
+            print(assess_result.user_id)
+
+        return Response({
+            **AssessmentSerializer(assessment).data,
+        })
 
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
