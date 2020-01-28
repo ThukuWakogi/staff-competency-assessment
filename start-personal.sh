@@ -1,5 +1,5 @@
-export DB_USER="nancy"
-export DB_PASSWORD="nkm"
+export DB_USER="pesh"
+export DB_PASSWORD="peninah"
 export DB_Name="assessments"
 
 source ./virtual/bin/activate

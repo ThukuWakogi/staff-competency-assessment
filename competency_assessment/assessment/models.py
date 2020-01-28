@@ -9,6 +9,9 @@ class JobGrade(models.Model):
     name = models.CharField(max_length=60)
     priority = models.IntegerField()
 
+    def __str__(self):
+        return self.name
+
 
 class UserManager(BaseUserManager):
     """
@@ -54,7 +57,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = models.TextField(max_length=1024)
     email = models.EmailField(_('email address'), unique=True)
-    job_grade = models.ForeignKey('JobGrade', blank=True, null=True, on_delete=models.CASCADE)
+    job_grade = models.ForeignKey(JobGrade, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = 'email'
