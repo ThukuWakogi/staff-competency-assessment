@@ -11,7 +11,7 @@ from datetime import datetime
 
 from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
-    CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer, AssessmentPeriodSerializer
+    CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer, JobGradeSerializer, AssessmentPeriodSerializer
 
 
 # Create your views here.
@@ -210,3 +210,21 @@ class AssessmentPeriodSummary(ViewSet):
                 ) < datetime.now()
             },
         })
+
+
+class UsersSummary(ViewSet):
+    queryset = JobGrade.objects.all()
+
+    def list(self, request):
+        users_summary = {}
+        users_summary.update({'total_number_of_user': len(User.objects.all())})
+
+        for job_grade in self.queryset:
+            users_summary.update({ job_grade.name: len(User.objects.filter(job_grade=job_grade)) })
+
+        return Response(users_summary)
+
+
+class JobGradeViewset(viewsets.ModelViewSet):
+    queryset = JobGrade.objects.all()
+    serializer_class = JobGradeSerializer

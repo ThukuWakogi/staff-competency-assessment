@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, AssessmentPeriod, Rating, Competency, Strand, Assessment, AssessmentResults, Idp, Notification
+from .models import User, AssessmentPeriod, Rating, Competency, Strand, Assessment, AssessmentResults, Idp, Notification,JobGrade
 
 
 # Create your views here.
@@ -84,4 +84,9 @@ class NotificationSerializer(serializers.ModelSerializer):
 class AssessmentPeriodSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentPeriod
+        fields = '__all__'
+
+class JobGradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobGrade
         fields = '__all__'
