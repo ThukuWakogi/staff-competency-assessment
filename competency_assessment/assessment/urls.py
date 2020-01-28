@@ -19,5 +19,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('auth/', views.ObtainAuthTokenAndUserDetails.as_view()),
     path('udft/', views.UserDetailsFromToken.as_view()),
-    # path('assessment-periods/summary/', views.AssessmentPeriodSummary.as_view())
+    path('assessments/pending/<int:user_id>/', views.CheckPendingAssessment.as_view({'get': 'list'}))
 ]
