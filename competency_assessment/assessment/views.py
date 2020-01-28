@@ -210,3 +210,27 @@ class AssessmentPeriodSummary(ViewSet):
                 ) < datetime.now()
             },
         })
+
+
+class CheckPendingAssessment(ViewSet):
+    queryset = Assessment.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        if len(AssessmentPeriod.objects.filter(start_date__lte=datetime.now(), end_date__gte=datetime.now(),
+                                               is_marked_as_ended=False)) == 0:
+            return Response({'is_assessment_period_ongoing': False})
+        else:
+            ongoing_assessment_period = AssessmentPeriod.objects.get(
+                start_date__lte=datetime.now(),
+                end_date__gte=datetime.now(),
+                is_marked_as_ended=False
+            )
+
+            return Response({
+                'is_assessment_period_ongoing': True,
+                'ongoing_assessment_period': {**AssessmentPeriodSerializer(ongoing_assessment_period).data},
+                'is_assessment_done': len(Assessment.objects.filter(
+                    assessment_period=ongoing_assessment_period,
+                    user_id=User.objects.get(pk=self.kwargs['user_id'])
+                )) != 0
+            })
