@@ -11,7 +11,8 @@ from datetime import datetime
 
 from .models import *
 from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
-    CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer, JobGradeSerializer, AssessmentPeriodSerializer
+    CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer, JobGradeSerializer, \
+    AssessmentPeriodSerializer
 
 
 # Create your views here.
@@ -108,7 +109,7 @@ class AssessmentViewSet(viewsets.ModelViewSet):
     serializer_class = AssessmentSerializer
 
     def create(self, request, *args, **kwargs):
-        user = User.objects.get(email=request.data['user_email'])
+        user = User.objects.get(id=request.data['user_id'])
         assessment_period = AssessmentPeriod.objects.get(pk=request.data['assessment_period'])
         assessment = Assessment.objects.create(user_id=user, assessment_period=assessment_period)
         results = []
@@ -124,7 +125,8 @@ class AssessmentViewSet(viewsets.ModelViewSet):
                         user_id=user,
                         competency=competency,
                         strand=_strand,
-                        rating=rating
+                        rating=rating,
+                        comments=strand['comment']
                     )
                 )
 
@@ -211,6 +213,7 @@ class AssessmentPeriodSummary(ViewSet):
             },
         })
 
+
 class UsersSummary(ViewSet):
     queryset = JobGrade.objects.all()
 
@@ -219,7 +222,7 @@ class UsersSummary(ViewSet):
         users_summary.update({'total_number_of_user': len(User.objects.all())})
 
         for job_grade in self.queryset:
-            users_summary.update({ job_grade.name: len(User.objects.filter(job_grade=job_grade)) })
+            users_summary.update({job_grade.name: len(User.objects.filter(job_grade=job_grade))})
 
         return Response(users_summary)
 
@@ -227,7 +230,7 @@ class UsersSummary(ViewSet):
 class JobGradeViewset(viewsets.ModelViewSet):
     queryset = JobGrade.objects.all()
     serializer_class = JobGradeSerializer
-    
+
 
 class CheckPendingAssessment(ViewSet):
     queryset = Assessment.objects.all()
