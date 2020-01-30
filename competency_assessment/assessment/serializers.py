@@ -63,7 +63,7 @@ class AssessmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ResultsSerializer(serializers.ModelSerializer):
+class AssessmentResultsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentResults
         fields = '__all__'

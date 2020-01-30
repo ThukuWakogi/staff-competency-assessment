@@ -10,9 +10,9 @@ from rest_framework.viewsets import ViewSet
 from datetime import datetime
 
 from .models import *
-from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, ResultsSerializer, \
-    CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer, JobGradeSerializer, \
-    AssessmentPeriodSerializer
+from .serializers import UserSerializer, PeriodSerializer, AssessmentSerializer, RatingSerializer, \
+    AssessmentResultsSerializer, CompetencySerializer, IdpSerializer, StrandSerializer, NotificationSerializer, \
+    JobGradeSerializer, AssessmentPeriodSerializer
 
 
 # Create your views here.
@@ -147,7 +147,7 @@ class RatingViewSet(viewsets.ModelViewSet):
 
 class AssessmentResultViewSet(viewsets.ModelViewSet):
     queryset = AssessmentResults.objects.all()
-    serializer_class = ResultsSerializer
+    serializer_class = AssessmentResultsSerializer
 
 
 class CompetencyViewSet(viewsets.ModelViewSet):
@@ -254,3 +254,28 @@ class CheckPendingAssessment(ViewSet):
                     user_id=User.objects.get(pk=self.kwargs['user_id'])
                 )) != 0
             })
+
+
+class AssessmentsByUser(ViewSet):
+    queryset = Assessment.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        assessment_and_results = {}
+        assessments = Assessment.objects.filter(
+            user_id=User.objects.get(id=self.kwargs['user_id']),
+            assessment_period=AssessmentPeriod.objects.get(id=self.kwargs['assessment_period'])
+        )
+        for assessment in assessments:
+            print(assessment)
+            assessment_results = AssessmentResults.objects.filter(assessment=assessment)
+            results = []
+
+            for result in assessment_results:
+                results.append({**AssessmentResultsSerializer(result).data})
+
+            assessment_and_results.update({
+                **AssessmentSerializer(assessment).data,
+                'results': results
+            })
+
+        return Response(assessment_and_results)
