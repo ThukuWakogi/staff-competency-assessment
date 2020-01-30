@@ -1,11 +1,47 @@
 import unittest
-from .models import Level, User, Competency, Strand, Assessment_period, Rating, Assessment, Assessment_results, Idp, Notifications, Direct_manager
+from .models import Level, User, Competency, Strand, AssessmentPeriod, Rating, Assessment, AssessmentResults, Idp, Notifications, DirectManager
+
 
 # Create your tests here.
+class UsersManagersTests(TestCase):
+    def test_create_user(self):
+        User = get_user_model()
+        user = User.objects.create_user(email='bryomajor@gmail.com', password='foo')
+        self.assertEqual(user.email, 'bryomajor@gmail.com')
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+        try:
+            self.assertIsNone(user.username)
+        except AttributeError:
+            pass
+        with self.assertRaises(TypeError):
+            User.objects.create_user()
+        with self.assertRaises(TypeError):
+            User.objects.create_user(email='')
+        with self.assertRaises(ValueError):
+            User.objects.create_user(email='', password='foo')
+
+    def test_create_superuser(self):
+        User = get_user_model()
+        admin_user = User.objects.create_superuser('super@user.com', 'foo')
+        self.assertEqual(admin_user.email, 'super@user.com')
+        self.assertTrue(admin_user.is_active)
+        self.assertTrue(admin_user.is_staff)
+        self.assertTrue(admin_user.is_superuser)
+        try:
+            self.assertIsNone(admin_user.username)
+        except AttributeError:
+            pass
+        with self.assertRaises(ValueError):
+            User.objects.create_superuser(email='super@user,com', password='foo', is_superuser=False)
+
+
 class TestLevel(unittest.TestCase):
     """
     Class to test the behaviour of the Level class.
     """
+
     def setUp(self):
         self.new_level = Level('intermediate', 2)
 
@@ -20,6 +56,7 @@ class TestUser(unittest.TestCase):
     """
     Class to test behaviour of the User class.
     """
+
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
@@ -35,6 +72,7 @@ class TestCompetency(unittest.TestCase):
     """
     Class to test behaviour of the Competency class.
     """
+
     def setUp(self):
         self.new_competency = Competency('teamwork')
 
@@ -49,6 +87,7 @@ class TestStrand(unittest.TestCase):
     """
     Class to test behaviour of the Strand class.
     """
+
     def setUp(self):
         self.new_competency = Competency('teamwork')
         self.new_strand = Strand('exemplary', self.new_competency)
@@ -59,27 +98,28 @@ class TestStrand(unittest.TestCase):
     def test_instance(self):
         self.assertTrue(isinstance(self.new_strand, Strand))
 
-    
 class TestAssessment_period(unittest.TestCase):
     """
     Class to test behaviour of the Assessment_period class.
     """
+
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_assessment_period = Assessment_period('2020/02/01', '2020/02/05', self.new_user)
+        self.new_assessment_period = AssessmentPeriod('2020/02/01', '2020/02/05', self.new_user)
 
     def tearDown(self):
-        Assessment_period.objects.all().delete()
+        AssessmentPeriod.objects.all().delete()
 
     def test_instance(self):
-        self.assertTrue(isinstance(self.new_assessment_period, Assessment_period))
+        self.assertTrue(isinstance(self.new_assessment_period, AssessmentPeriod))
 
 
 class TestRating(unittest.TestCase):
     """
     Class to test behaviour of the Rating class.
     """
+
     def setUp(self):
         self.new_rating = Rating('top', 2)
 
@@ -94,10 +134,11 @@ class TestAssessment(unittest.TestCase):
     """
     Class to test behaviour of Assessment class.
     """
+
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_assessment_period = Assessment_period('2020/02/01', '2020/02/05', self.new_user)
+        self.new_assessment_period = AssessmentPeriod('2020/02/01', '2020/02/05', self.new_user)
         self.new_assessment = Assessment(self.new_assessment_period, True, False)
 
     def tearDown(self):
@@ -107,45 +148,46 @@ class TestAssessment(unittest.TestCase):
         self.assertTrue(isinstance(self.new_assessment, Assessment))
 
 
-
 class TestAssessment_results(unittest.TestCase):
     """
     Class to test the behaviour of Assessment_results class.
     """
+
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_assessment_period = Assessment_period('2020/02/01', '2020/02/05', self.new_user)
+        self.new_assessment_period = AssessmentPeriod('2020/02/01', '2020/02/05', self.new_user)
         self.new_assessment = Assessment(self.new_assessment_period, True, False)
         self.new_competency = Competency('teamwork')
         self.new_strand = Strand('exemplary', self.new_competency)
         self.new_rating = Rating('top', 2)
-        self.new_assessment_results = Assessment_results(self.new_assessment, 1, self.new_competency, self.new_strand, self.new_rating)
+        self.new_assessment_results = AssessmentResults(self.new_assessment, 1, self.new_competency, self.new_strand, self.new_rating)
 
     def tearDown(self):
-        Assessment_results.objects.all().delete()
+        AssessmentResults.objects.all().delete()
 
     def test_instance(self):
-        self.assertTrue(isinstance(self.new_assessment_results, Assessment_results))
+        self.assertTrue(isinstance(self.new_assessment_results, AssessmentResults))
 
 
 class TestIdp(unittest.TestCase):
     """
     Class to test the behaviour of Idp class.
     """
+
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_assessment_period = Assessment_period('2020/02/01', '2020/02/05', self.new_user)
+        self.new_assessment_period = AssessmentPeriod('2020/02/01', '2020/02/05', self.new_user)
         self.new_assessment = Assessment(self.new_assessment_period, True, False)
-        self.new_idp = Idp(self.new_assessment, 'This is an action', 'This is a resource', 'This is a target', 'This is a progress indicator', 'This is a nature of support')
+        self.new_idp = Idp(self.new_assessment, 'This is an action', 'This is a resource', 'This is a target',
+                           'This is a progress indicator', 'This is a nature of support')
 
     def tearDown(self):
         Idp.objects.all().delete()
 
     def test_instance(self):
         self.assertTrue(isinstance(self.new_idp, Idp))
-
 
 
 class TestNotifications(unittest.TestCase):
@@ -159,17 +201,18 @@ class TestNotifications(unittest.TestCase):
         self.assertTrue(isinstance(self.new_notification, Notifications))
 
 
-class TestDirect_manager(unittest.TestCase):
+class TestDirectManager(unittest.TestCase):
     """
     Class that tests the behaviour of Direct_manager.
     """
+
     def setUp(self):
         self.new_level = Level('intermediate', 2)
         self.new_user = User('user@user.com', self.new_level)
-        self.new_direct_manager = Direct_manager(2, 'direct manager')
+        self.new_direct_manager = DirectManager(2, 'direct manager')
 
     def tearDown(self):
-        Direct_manager.objects.all().delete()
+        DirectManager.objects.all().delete()
 
     def test_instance(self):
-        self.assertTrue(isinstance(self.new_direct_manager, Direct_manager))
+        self.assertTrue(isinstance(self.new_direct_manager, DirectManager))
